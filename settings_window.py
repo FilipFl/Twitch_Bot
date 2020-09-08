@@ -24,7 +24,6 @@ class SettingsWindow(QMainWindow):
 
     def read_data(self):
         if os.path.exists("./data/settings.txt"):
-            print("ble")
             f = open("./data/settings.txt", "r")
             read = f.readlines()
             self.textbox1.setText(read[0])
