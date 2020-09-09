@@ -25,3 +25,17 @@ class Interactor:
         random_user = buf[1]
         print(random_user)
         return random_user
+
+    def get_chatters(self):
+        response = urlfetch.get('https://tmi.twitch.tv/group/user/leon_official/chatters')
+        data = json.load(response)
+        chatters_list = []
+        for element in data['chatters'].keys():
+            for x in data['chatters'][element]:
+                chatters_list.append(x)
+        return chatters_list
+
+
+if __name__ == '__main__':
+    interact = Interactor()
+    interact.get_chatters()
