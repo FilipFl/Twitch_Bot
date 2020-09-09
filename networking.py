@@ -4,7 +4,7 @@ import string
 import os
 
 
-class MySocket:
+class MyNetworking:
 
     def __init__(self):
         self.host = "irc.chat.twitch.tv"
@@ -15,6 +15,7 @@ class MySocket:
         self.s = socket.socket()
         self.s.connect((self.host, self.port))
         if self.get_config():
+            print(self.identity)
             self.s.send(("PASS " + self.password + "\r\n").encode())
             self.s.send(("NICK " + self.identity + "\r\n").encode())
             self.s.send(("JOIN #" + self.channel + "\r\n").encode())
@@ -23,9 +24,13 @@ class MySocket:
         if os.path.exists("./data/settings.txt"):
             f = open("./data/settings.txt", "r")
             read = f.readlines()
+            print(read)
             self.password = read[0]
+            self.password = self.password[:-1:]
             self.identity = read[1]
+            self.identity = self.identity[:-1:]
             self.channel = read[2]
+            self.channel = self.channel[:-1:]
             f.close()
             return True
         else:
@@ -61,4 +66,10 @@ class MySocket:
             return False
         else:
             return True
+
+    def get_channel(self):
+        return self.channel
+
+    def get_socket(self):
+        return self.s
 
