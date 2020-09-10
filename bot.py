@@ -1,6 +1,7 @@
 from networking import MyNetworking
 from interactions import Interactor
-
+from functions.iq import *
+import time
 
 class Bot:
 
@@ -10,6 +11,12 @@ class Bot:
         self.socket = self.networking.get_socket()
         self.channel = self.networking.get_channel()
         self.interactor = Interactor()
+        self.last_time = time.time()
+
+    def send_info(self):
+        if time.time() - 60 > self.last_time:
+            self.send_msg("Filip jest najlepszy!")
+            self.last_time = time.time()
 
     def listen_chat(self):
         readbuffer = ""
@@ -24,4 +31,17 @@ class Bot:
             message = ""
             message = self.interactor.get_message(line)
             print(user + " typed: " + message)
+            self.look_for_cmd(user, message)
+
+
+    def send_msg(self, message):
+        self.networking.send_message(message)
+
+    def check_iq(self, user, message):
+        if "!iq\r" in message:
+            temp_msg = user + ' ma ' + Iq.get_iq() + ' IQ.'
+            self.send_msg(temp_msg)
+
+    def look_for_cmd(self, user, message):
+        self.check_iq(user, message)
 

@@ -12,6 +12,7 @@ class Window(QMainWindow):
         self.sett_window = None
         self.bot = None
         self.worker = None
+        self.info_worker = None
         self.start_btn = self.set_button("Start the\n bot!", self.start_bot, 40, 40, True)
         self.set_button("Settings", self.settings, 160, 40)
         self.stop_btn = None
@@ -39,6 +40,10 @@ class Window(QMainWindow):
         self.threadpool.start(worker)
         self.stop_btn = self.set_button("Stop the bot!", self.worker.kill, 40, 40, True)
         self.stop_btn.clicked.connect(self.stop_bot)
+        worker = Worker(self.bot.send_info)
+        self.info_worker = worker
+        self.threadpool.start(worker)
+        self.stop_btn.clicked.connect(self.info_worker.kill)
 
     def settings(self):
         self.sett_window = SettingsWindow()

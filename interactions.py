@@ -1,6 +1,6 @@
 import json
 import urlfetch
-
+import time
 
 class Interactor:
 
@@ -23,7 +23,7 @@ class Interactor:
         buf = str(response.content)
         buf = buf.split("'")
         random_user = buf[1]
-        print(random_user)
+        random_user = random_user[:-1:]
         return random_user
 
     def get_chatters(self):
@@ -36,6 +36,6 @@ class Interactor:
         return chatters_list
 
 
+
 if __name__ == '__main__':
     interact = Interactor()
-    interact.get_chatters()
