@@ -1,7 +1,7 @@
 from peewee import *
 
 
-class Klaps(Model):
+class Spank(Model):
     user = CharField()
     counter = IntegerField()
 

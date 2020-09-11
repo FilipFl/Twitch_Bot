@@ -10,7 +10,7 @@ class Pokeball(Model):
         database = SqliteDatabase("bot_db.db")
 
 
-class Mistrz(Model):
+class Master(Model):
 
     name = CharField()
 
