@@ -12,31 +12,32 @@ class DBHandler:
         self.db.connect()
 
     def dump_data_manually(self):
+        # method used by me for dumping into database things stored in txt files in previous bot version
         self.db.create_tables([Pokeball, Master, Cooldown, Blacklist, Spank])
         spankUser = []
         spankCounter = []
-        file = open("counters.txt", "r")
+        file = open("database/counters.txt", "r")
         for line in file:
             separate = line.split(" ")
             spankUser.append(separate[0])
             spankCounter.append(int(separate[1]))
         file.close()
-        file = open("blacklist.txt", "r")
+        file = open("database/blacklist.txt", "r")
         blacklist = []
         for line in file:
             separate = line.split(" ")
             blacklist.append(separate[0])
         file.close()
-        file = open("mistrz_pokemon.txt", "r")
+        file = open("database/mistrz_pokemon.txt", "r")
         master_pokemon = file.read()
         file.close()
-        file = open("cooldowns.txt", "r")
+        file = open("database/cooldowns.txt", "r")
         cooldowns = []
         for line in file:
             separate = line
             cooldowns.append(separate)
         file.close()
-        file = open("pokeball.txt", "r")
+        file = open("database/pokeball.txt", "r")
         poke = []
         for line in file:
             separate = line
@@ -58,50 +59,99 @@ class DBHandler:
         self.get_blacklist()
 
     def get_blacklist(self):
-
         query = Blacklist.select()
         for user in query:
             print(user.user)
 
-    def is_on_blacklist(self, user):
+    @staticmethod
+    def isnt_on_blacklist(user):
+        db = SqliteDatabase("bot_db.db")
+        db.connect()
         query = Blacklist.select().where(Blacklist.user == user)
-        if query.scalar() is not None:
+        db.close()
+        if query.scalar() is None:
             return True
         else:
             return False
 
-    def get_spank_counter(self, us):
+    @staticmethod
+    def get_spank_counter(us):
+        db = SqliteDatabase("bot_db.db")
+        db.connect()
         query = Spank.select().where(Spank.user == us)
+        db.close()
         if query.scalar()is None:
             Spank.create(user=us, counter=1)
             return 1
         else:
+            print(query[0].counter)
+            query[0].counter = query[0].counter + 1
+            query[0].save()
             return query[0].counter
 
-    def get_pokemon_master(self):
+    @staticmethod
+    def get_pokemon_master():
+        db = SqliteDatabase("bot_db.db")
+        db.connect()
         query = Master.select()
+        db.close()
         return query[0].name
 
-    def set_pokemon_master(self, user):
+    @staticmethod
+    def set_pokemon_master(user):
+        db = SqliteDatabase("bot_db.db")
+        db.connect()
         query = Master.select()
         query[0].name = user
         query[0].save()
+        db.close()
 
-    def get_cooldowns(self):
+    @staticmethod
+    def get_cooldowns():
+        db = SqliteDatabase("bot_db.db")
+        db.connect()
         query = Cooldown.select()
         temp_dict = {}
         for element in query:
             temp_dict[element.function] = element.value
+        db.close()
         return temp_dict
 
-    def get_pokeball_settings(self):
+    @staticmethod
+    def get_pokeball_settings():
+        db = SqliteDatabase("bot_db.db")
+        db.connect()
         query = Pokeball.select()
         temp_dict = {}
         for element in query:
             temp_dict[element.name] = element.chance
+        db.close()
         return temp_dict
+
+    @staticmethod
+    def get_ranking():
+        db = SqliteDatabase("bot_db.db")
+        db.connect()
+        napis = "Wyniki! "
+        query = Spank.select().order_by(Spank.counter.desc())
+        if len(query) > 10:
+            for i in range(10):
+                napis += str(i + 1) + ". " + query[i].user + " - " + str(query[i].counter) + " klapsów!    "
+        else:
+            for i in range(len(query)):
+                napis += str(i + 1) + ". " + query[i].user + " - " + str(query[i].counter) + " klapsów!    "
+        db.close()
+        return napis
+
+    @staticmethod
+    def get_most_spanked():
+        db = SqliteDatabase("bot_db.db")
+        db.connect()
+        query = Spank.select().order_by(Spank.counter.desc())
+        db.close()
+        return query[0].user, query[0].counter
 
 
 if __name__ == '__main__':
     handle = DBHandler()
-    print(handle.get_pokeball_settings())
+    print(handle.get_ranking())

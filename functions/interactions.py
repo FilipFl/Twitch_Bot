@@ -2,22 +2,23 @@ import json
 import urlfetch
 import time
 
+
 class Interactor:
 
-    def __init__(self):
-        pass
-
-    def get_user(self, line):
+    @staticmethod
+    def get_user(line):
         separate = line.split(":", 2)
         user = separate[1].split("!", 1)[0]
         return user
 
-    def get_message(self, line):
+    @staticmethod
+    def get_message(line):
         separate = line.split(":", 2)
         message = separate[2]
         return message
 
-    def random_user(self, channel):
+    @staticmethod
+    def random_user(channel):
         response = urlfetch.get("https://2g.be/twitch/randomviewer.php?channel=" + channel)
         random_user = ""
         buf = str(response.content)
@@ -26,8 +27,9 @@ class Interactor:
         random_user = random_user[:-1:]
         return random_user
 
-    def get_chatters(self):
-        response = urlfetch.get('https://tmi.twitch.tv/group/user/leon_official/chatters')
+    @staticmethod
+    def get_chatters(channel):
+        response = urlfetch.get('https://tmi.twitch.tv/group/user/' + channel + '/chatters')
         data = json.load(response)
         chatters_list = []
         for element in data['chatters'].keys():
