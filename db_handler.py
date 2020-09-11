@@ -25,7 +25,7 @@ class DBHandler:
         file = open("database/blacklist.txt", "r")
         blacklist = []
         for line in file:
-            separate = line.split(" ")
+            separate = line.split("\n")
             blacklist.append(separate[0])
         file.close()
         file = open("database/mistrz_pokemon.txt", "r")
@@ -154,4 +154,4 @@ class DBHandler:
 
 if __name__ == '__main__':
     handle = DBHandler()
-    print(handle.get_ranking())
+    print(handle.dump_data_manually())

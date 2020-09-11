@@ -58,7 +58,28 @@ class Bot:
 
     def check_spank(self):
         if"!klaps\r" in self.last_message:
-            Spanking.SpankIt(self.last_user, self.channel, self.send_msg)
+            print(self.user_cooldowns)
+            if self.check_cooldown('spank'):
+                print(self.user_cooldowns)
+                Spanking.SpankIt(self.last_user, self.channel, self.send_msg)
+
+    def check_cooldown(self, function):
+        if self.last_user in self.user_cooldowns:
+            if function in self.user_cooldowns[self.last_user]:
+                if time.time() - self.cooldowns[function] > self.user_cooldowns[self.last_user][function]:
+                    self.user_cooldowns[self.last_user][function] = time.time()
+                    return True
+                else:
+                    return False
+            else:
+                self.user_cooldowns[self.last_user][function] = time.time()
+                return True
+        else:
+            self.user_cooldowns[self.last_user] = {}
+            self.user_cooldowns[self.last_user][function] = time.time()
+            return True
+
+
 
     def look_for_cmd(self):
         self.check_iq()
