@@ -18,6 +18,7 @@ class Bot:
         self.info = True
         self.cooldowns = DBHandler.get_cooldowns()
         self.user_cooldowns = {}
+        self.running = True
 
     def send_info(self):
         if time.time() - 180 > self.last_time:
@@ -79,10 +80,21 @@ class Bot:
             self.user_cooldowns[self.last_user][function] = time.time()
             return True
 
+    def check_end(self):
+        if"!koniecpsot\r" in self.last_message and self.last_user == 'erag0rn':
+            self.running = False
 
+    def guiless(self):
+        while True:
+            self.listen_chat()
 
     def look_for_cmd(self):
         self.check_iq()
         self.check_ranking()
         self.check_spank()
+        self.check_end()
 
+
+if __name__ == '__main__':
+    bot = Bot()
+    bot.guiless()

@@ -28,7 +28,7 @@ class Window(QMainWindow):
         btn1.move(x, y)
         btn1.clicked.connect(action)
         if increase:
-            btn1.setGeometry(x,y,80, 80)
+            btn1.setGeometry(x, y, 80, 80)
         btn1.setVisible(visibility)
         return btn1
 
