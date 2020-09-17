@@ -3,7 +3,7 @@
 <br>
 
 <p align="center">
-<img src="https://github.com/FilipFl/readme/blob/master/bot_git/logo.png"  alt="Logo">
+<img src="https://github.com/FilipFl/readme/blob/master/bot_git/logo.jpg"  alt="Logo">
 </p>
 
 <br>
