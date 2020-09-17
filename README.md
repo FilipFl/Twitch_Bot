@@ -22,7 +22,7 @@ Twitch chat bot
 </p>
 
 ## Project Overview 🎉
-This is my approach to create a twitch chat bot that is capable to performing more difficult actions than commercially used bots. Project is maintained with a bit of humour, as it is supposed to work on my friends' stream. Right now the bot is reading the chat, responding to specific comments, is using database if needed. Project is still in development.
+This is my approach to create a twitch chat bot that is capable to performing more difficult actions than commercially used bots. Project is maintained with a bit of humour, as it is supposed to work on my friends' stream. Right now the bot is reading the chat, responding to specific !commands (ex. !iq), is using database if needed. Project is still in development.
 ## Tech/framework used 🔧
 
 | Tech                                                    | Description                              |
